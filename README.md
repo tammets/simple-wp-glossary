@@ -1,1 +1,1 @@
-# simple-wp-glossary
+# Simple Wordpress Glossary Plugin
