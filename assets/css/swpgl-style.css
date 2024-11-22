@@ -1,7 +1,8 @@
 .glossary-term {
     position: relative;
     cursor: pointer;
-    text-decoration: underline dotted;
+    text-decoration: underline;
+    background-color: antiquewhite;
 }
 
 .glossary-term-popup {

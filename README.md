@@ -41,16 +41,6 @@ Use the [glossary_hover] shortcode to add a hover link for a glossary term. Repl
 - Select a glossary term from the dropdown.
 - The appropriate shortcode will be automatically inserted.
 
-## Screenshots
-
-1.	**Glossary** Post Type
-
-A menu to manage glossary terms.
-
-2.	**TinyMCE Glossary Button**
-
-Easily insert glossary term shortcodes with a dropdown selector.
-
 ## Development
 
 ### Enqueueing Assets
