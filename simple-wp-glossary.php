@@ -2,7 +2,7 @@
 /*
 Plugin Name: Simple WP Glossary
 Description: A simplified WordPress plugin for creating and displaying glossary terms.
-Version: 1.0
+Version: 1.1
 Author: Priit Tammets
 */
 
@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// Register Custom Post Type for Glossary Terms
+// 1. Register Custom Post Type for Glossary Terms
 function swpgl_register_glossary_post_type() {
     $labels = [
         'name'                  => 'Glossary Terms',
@@ -33,22 +33,23 @@ function swpgl_register_glossary_post_type() {
         'labels'                => $labels,
         'public'                => true,
         'show_in_menu'          => true,
-        'menu_icon'             => 'dashicons-book-alt', // Icon in the admin menu
+        'menu_icon'             => 'dashicons-book-alt',
         'supports'              => ['title', 'editor'],
         'has_archive'           => false,
-        'show_in_rest'          => true, // Enables Gutenberg editor
+        'show_in_rest'          => true,
     ];
 
     register_post_type('glossary_term', $args);
 }
 add_action('init', 'swpgl_register_glossary_post_type');
 
-// Shortcode to Display Glossary Terms
+// 2. Shortcodes
+// 2.1 Display All Glossary Terms
 function swpgl_display_glossary_terms($atts) {
     // Fetch all glossary terms
     $glossary_query = new WP_Query([
         'post_type'      => 'glossary_term',
-        'posts_per_page' => -1, // Show all terms
+        'posts_per_page' => -1,
         'orderby'        => 'title',
         'order'          => 'ASC',
     ]);
@@ -72,41 +73,36 @@ function swpgl_display_glossary_terms($atts) {
 }
 add_shortcode('glossary_terms', 'swpgl_display_glossary_terms');
 
-// Shortcode for Hover Link to Display Glossary Term
+// 2.2 Hover Glossary Term
 function swpgl_hover_glossary_term($atts, $content = null) {
     $atts = shortcode_atts(
-        ['id' => 0], // Expecting the glossary term ID
+        ['id' => 0],
         $atts,
         'glossary_hover'
     );
 
     if (!$atts['id']) {
-        return $content; // If no ID is provided, return the original content
+        return $content;
     }
 
     $term_post = get_post($atts['id']);
     if (!$term_post || $term_post->post_type !== 'glossary_term') {
-        return $content; // If the term doesn't exist, return the original content
+        return $content;
     }
 
-    // Prepare the term's title and description for display
     $title = esc_html($term_post->post_title);
     $description = esc_html(wp_trim_words($term_post->post_content, 30));
 
-    // Return the hover link with a data attribute for the popup content
     return '<span class="glossary-term" data-term-title="' . $title . '" data-term-desc="' . $description . '">' . $content . '</span>';
 }
 add_shortcode('glossary_hover', 'swpgl_hover_glossary_term');
 
-// Enqueue Scripts and Styles
+// 3. Frontend Scripts and Styles
 function swpgl_enqueue_assets() {
-    // Enqueue CSS
     wp_enqueue_style(
         'swpgl-style',
         plugin_dir_url(__FILE__) . 'assets/css/swpgl-style.css'
     );
-
-    // Enqueue JavaScript
     wp_enqueue_script(
         'swpgl-script',
         plugin_dir_url(__FILE__) . 'assets/js/swpgl-script.js',
@@ -116,3 +112,57 @@ function swpgl_enqueue_assets() {
     );
 }
 add_action('wp_enqueue_scripts', 'swpgl_enqueue_assets');
+
+// Enqueue script for TinyMCE button
+function swpgl_enqueue_editor_scripts($hook) {
+    // Load script only in post editor
+    if (in_array($hook, ['post.php', 'post-new.php'])) {
+        wp_enqueue_script(
+            'swpgl-editor-script',
+            plugin_dir_url(__FILE__) . 'assets/js/swpgl-editor.js',
+            ['jquery', 'editor'], // Ensure dependencies for WordPress editor and TinyMCE
+            null,
+            true
+        );
+    }
+}
+add_action('admin_enqueue_scripts', 'swpgl_enqueue_editor_scripts');
+
+// Add TinyMCE Button
+function swpgl_add_tinymce_button($buttons) {
+    array_push($buttons, 'swpgl_button');
+    return $buttons;
+}
+
+function swpgl_register_tinymce_plugin($plugin_array) {
+    $plugin_array['swpgl_plugin'] = plugin_dir_url(__FILE__) . 'assets/js/swpgl-editor.js';
+    return $plugin_array;
+}
+
+add_filter('mce_buttons', 'swpgl_add_tinymce_button');
+add_filter('mce_external_plugins', 'swpgl_register_tinymce_plugin');
+
+// 5. AJAX Handler
+function swpgl_get_glossary_terms() {
+    $query = new WP_Query([
+        'post_type'      => 'glossary_term',
+        'posts_per_page' => -1,
+        'orderby'        => 'title',
+        'order'          => 'ASC',
+    ]);
+
+    $terms = [];
+    if ($query->have_posts()) {
+        while ($query->have_posts()) {
+            $query->the_post();
+            $terms[] = [
+                'id'    => get_the_ID(),
+                'title' => get_the_title(),
+            ];
+        }
+    }
+    wp_reset_postdata();
+
+    wp_send_json_success($terms);
+}
+add_action('wp_ajax_swpgl_get_glossary_terms', 'swpgl_get_glossary_terms');
