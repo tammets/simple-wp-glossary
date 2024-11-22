@@ -1,0 +1,22 @@
+.glossary-term {
+    position: relative;
+    cursor: pointer;
+    text-decoration: underline dotted;
+}
+
+.glossary-term-popup {
+    display: none;
+    position: absolute;
+    background-color: #fff;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 10px;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    width: 300px;
+}
+
+.glossary-term:hover .glossary-term-popup {
+    display: block;
+}
