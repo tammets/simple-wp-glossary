@@ -18,34 +18,34 @@ A simplified WordPress plugin for creating and displaying glossary terms. This p
    ```bash
    git clone https://github.com/yourusername/simple-wp-glossary.git
 
-2.	Activate the plugin through the Plugins menu in WordPress.
-3.	Start creating glossary terms under the Glossary menu in the WordPress admin panel.
+2.	Activate the plugin through the **Plugins** menu in WordPress.
+3.	Start creating glossary terms under the **Glossary** menu in the WordPress admin panel.
 
 ## Usage
 
-Display All Glossary Terms
+### Display All Glossary Terms
 
 Use the [glossary_terms] shortcode in any post or page to display a list of all glossary terms. Example:
 
 [glossary_terms]
 
-Add a Hover Link for a Specific Glossary Term
+### Add a Hover Link for a Specific Glossary Term
 
 Use the [glossary_hover] shortcode to add a hover link for a glossary term. Replace 123 with the term ID. Example:
 
 [glossary_hover id="123"]Click here[/glossary_hover]
 
-Insert Shortcodes via the WordPress Editor
+### Insert Shortcodes via the WordPress Editor
 
-	•	Click the Glossary button in the editor toolbar.
+	•	Click the **Glossary** button in the editor toolbar.
 	•	Select a glossary term from the dropdown.
 	•	The appropriate shortcode will be automatically inserted.
 
 ## Screenshots
 
-1.	Glossary Post Type
+1.	**Glossary** Post Type
 •	A menu to manage glossary terms.
-2.	TinyMCE Glossary Button
+2.	**TinyMCE Glossary Button**
 •	Easily insert glossary term shortcodes with a dropdown selector.
 
 ## Development
@@ -53,8 +53,8 @@ Insert Shortcodes via the WordPress Editor
 ### Enqueueing Assets
 
 The plugin uses the following assets:
-	•	CSS: assets/css/swpgl-style.css for frontend styling.
-	•	JavaScript: assets/js/swpgl-script.js for hover popups and interactivity.
+	•	**CSS**: assets/css/swpgl-style.css for frontend styling.
+	•	**JavaScript**: assets/js/swpgl-script.js for hover popups and interactivity.
 
 ### AJAX
 
