@@ -11,7 +11,7 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
-// 1. Register Custom Post Type for Glossary Terms
+// Register Custom Post Type for Glossary Terms
 function swpgl_register_glossary_post_type() {
     $labels = [
         'name'                  => 'Glossary Terms',
@@ -43,8 +43,7 @@ function swpgl_register_glossary_post_type() {
 }
 add_action('init', 'swpgl_register_glossary_post_type');
 
-// 2. Shortcodes
-// 2.1 Display All Glossary Terms
+// Display All Glossary Terms
 function swpgl_display_glossary_terms($atts) {
     // Fetch all glossary terms
     $glossary_query = new WP_Query([
@@ -73,7 +72,7 @@ function swpgl_display_glossary_terms($atts) {
 }
 add_shortcode('glossary_terms', 'swpgl_display_glossary_terms');
 
-// 2.2 Hover Glossary Term
+// Hover Glossary Term
 function swpgl_hover_glossary_term($atts, $content = null) {
     $atts = shortcode_atts(
         ['id' => 0],
@@ -97,7 +96,7 @@ function swpgl_hover_glossary_term($atts, $content = null) {
 }
 add_shortcode('glossary_hover', 'swpgl_hover_glossary_term');
 
-// 3. Frontend Scripts and Styles
+// Frontend Scripts and Styles
 function swpgl_enqueue_assets() {
     wp_enqueue_style(
         'swpgl-style',
@@ -142,7 +141,7 @@ function swpgl_register_tinymce_plugin($plugin_array) {
 add_filter('mce_buttons', 'swpgl_add_tinymce_button');
 add_filter('mce_external_plugins', 'swpgl_register_tinymce_plugin');
 
-// 5. AJAX Handler
+// AJAX Handler
 function swpgl_get_glossary_terms() {
     $query = new WP_Query([
         'post_type'      => 'glossary_term',

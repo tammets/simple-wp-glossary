@@ -5,6 +5,10 @@
     background-color: antiquewhite;
 }
 
+.glossary-term:hover {
+    background-color: whitesmoke;
+}
+
 .glossary-term-popup {
     display: none;
     position: absolute;
@@ -18,6 +22,6 @@
     width: 300px;
 }
 
-.glossary-term:hover .glossary-term-popup {
+.glossary-term-popup {
     display: block;
 }
